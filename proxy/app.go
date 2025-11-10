@@ -44,6 +44,13 @@ func main() {
 
 	apiRouter.Handle("/flightctl/{forward:.*}", bridge.NewFlightCtlHandler(tlsConfig))
 
+	if config.IsBuilderEnabled() {
+		apiRouter.Handle("/builder/{forward:.*}", bridge.NewBuilderHandler(tlsConfig))
+
+	} else {
+		apiRouter.HandleFunc("/builder/{forward:.*}", bridge.UnimplementedHandler)
+	}
+
 	alertManagerUrl, alertManagerEnabled := os.LookupEnv("FLIGHTCTL_ALERTMANAGER_PROXY")
 	if alertManagerEnabled && alertManagerUrl != "" {
 		apiRouter.Handle("/alerts/{forward:.*}", bridge.NewAlertManagerHandler(tlsConfig))
@@ -69,6 +76,16 @@ func main() {
 		})
 	} else {
 		apiRouter.HandleFunc("/organizations-enabled", bridge.UnimplementedHandler)
+	}
+
+	// Simple endpoint to check if builder is enabled
+	if config.IsBuilderEnabled() {
+		apiRouter.HandleFunc("/builder-enabled", func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{"enabled": true}`))
+		})
+	} else {
+		apiRouter.HandleFunc("/builder-enabled", bridge.UnimplementedHandler)
 	}
 
 	if config.OcpPlugin != "true" {

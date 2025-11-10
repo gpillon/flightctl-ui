@@ -19,4 +19,5 @@ export enum RESOURCE {
   ENROLLMENT_REQUEST = 'enrollmentrequests',
   ENROLLMENT_REQUEST_APPROVAL = 'enrollmentrequests/approval',
   ALERTS = 'alerts',
+  IMAGE_BUILD = 'imagebuilds',
 }

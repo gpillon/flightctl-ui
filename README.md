@@ -35,6 +35,18 @@ If backend is not running in your Kind cluster, you need to specify your Flight 
 FLIGHTCTL_SERVER=<api_server_url> npm run dev
 ```
 
+### Running with Image Builder
+
+The Image Builder is integrated into the main FlightCtl API. By default, the UI will use `FLIGHTCTL_SERVER` for ImageBuild endpoints.
+
+  To use a separate builder server (if needed):
+
+```shell
+FLIGHTCTL_BUILDER_SERVER=https://builder.example.com npm run dev
+```
+
+**Note**: When `FLIGHTCTL_BUILDER_SERVER` is not set, the UI automatically uses `FLIGHTCTL_SERVER` for ImageBuild API calls (`/api/v1/imagebuilds`).
+
 If the backend, or Auth provider is running self-signed certs, you will need to disable the verification via environment variables:
 
 - `FLIGHTCTL_SERVER_INSECURE_SKIP_VERIFY='true'` - to disable verification of backend certs

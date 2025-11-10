@@ -34,6 +34,12 @@ export const appRoutes = {
   [ROUTE.ENROLLMENT_REQUESTS]: '/devicemanagement/enrollmentrequests',
   [ROUTE.ENROLLMENT_REQUEST_DETAILS]: '/devicemanagement/enrollmentrequests',
   [ROUTE.COMMAND_LINE_TOOLS]: '/command-line-tools',
+  [ROUTE.IMAGE_BUILDS]: '/devicemanagement/imagebuilds',
+  [ROUTE.IMAGE_BUILD_CREATE]: '/devicemanagement/imagebuilds/create',
+  [ROUTE.IMAGE_BUILD_CREATE_YAML]: '/devicemanagement/imagebuilds/create-yaml',
+  [ROUTE.IMAGE_BUILD_CREATE_CONTAINERFILE]: '/devicemanagement/imagebuilds/create-containerfile',
+  [ROUTE.IMAGE_BUILD_DETAILS]: '/devicemanagement/imagebuilds',
+  [ROUTE.IMAGE_BUILD_EDIT]: '/devicemanagement/imagebuilds',
 };
 
 export type NavLinkFC = React.FC<{ to: string; children: (props: { isActive: boolean }) => React.ReactNode }>;

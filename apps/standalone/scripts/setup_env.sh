@@ -115,6 +115,28 @@ else
     unset FLIGHTCTL_ALERTMANAGER_PROXY
 fi
 
+# Builder - get setting from kind cluster, unless it has been configured already
+# Default to enabled since ImageBuild is part of the main API (not a separate service)
+if [ -z "$ENABLE_BUILDER" ]; then
+    # ImageBuild endpoints are part of the main FlightCtl API, not a separate service
+    # So we always enable it by default (it's integrated in the API)
+    ENABLE_BUILDER="true"
+    echo "Autodetected: Image Builder enabled ✅ (integrated in main API)" >&2
+fi
+export ENABLE_BUILDER
+
+# Builder configuration
+# By default, don't set FLIGHTCTL_BUILDER_SERVER so it uses the main API (fallback behavior)
+# Don't set FLIGHTCTL_BUILDER_SERVER unless explicitly provided
+# This allows the proxy to use the main FlightCtl API for ImageBuild endpoints
+if [ -n "$FLIGHTCTL_BUILDER_SERVER" ]; then
+    # If explicitly set via environment, export it
+    export FLIGHTCTL_BUILDER_SERVER
+else
+    # Make sure it's unset (uses main API fallback)
+    unset FLIGHTCTL_BUILDER_SERVER
+fi
+
 echo ""
 echo "🌐 Environment variables set:" >&2
 echo "  FLIGHTCTL_SERVER_INSECURE_SKIP_VERIFY=$FLIGHTCTL_SERVER_INSECURE_SKIP_VERIFY" >&2
@@ -122,4 +144,6 @@ echo "  FLIGHTCTL_SERVER=$FLIGHTCTL_SERVER" >&2
 echo "  FLIGHTCTL_CLI_ARTIFACTS_SERVER=${FLIGHTCTL_CLI_ARTIFACTS_SERVER:-'(disabled)'}" >&2
 echo "  FLIGHTCTL_ALERTMANAGER_PROXY=${FLIGHTCTL_ALERTMANAGER_PROXY:-'(disabled)'}" >&2
 echo "  ORGANIZATIONS_ENABLED=$ORGANIZATIONS_ENABLED" >&2
+echo "  ENABLE_BUILDER=$ENABLE_BUILDER" >&2
+echo "  FLIGHTCTL_BUILDER_SERVER=${FLIGHTCTL_BUILDER_SERVER:-'(not set - using main API)'}" >&2
 echo >&2

@@ -30,7 +30,17 @@ const config: Configuration & {
       directory: path.resolve(__dirname, 'dist'),
     },
     client: {
-      overlay: true,
+      overlay: {
+        errors: true,
+        warnings: false,
+        runtimeErrors: (error) => {
+          // Filter out ResizeObserver errors - these are harmless and common with Monaco Editor
+          if (error.message === 'ResizeObserver loop completed with undelivered notifications.') {
+            return false;
+          }
+          return true;
+        },
+      },
     },
     devMiddleware: {
       writeToDisk: true,
@@ -200,12 +210,14 @@ if (NODE_ENV === 'production') {
     }),
   );
   config.devtool = 'source-map';
-} else {
-  config.plugins?.push(
-    new DefinePlugin({
-      'window.API_PORT': JSON.stringify(process.env.API_PORT) || '3001',
-    }),
-  );
 }
+
+// Inject environment variables into the app (same for dev and prod)
+config.plugins?.push(
+  new DefinePlugin({
+    'window.API_PORT': JSON.stringify(process.env.API_PORT) || '3001',
+    'window.ENABLE_BUILDER': JSON.stringify(process.env.ENABLE_BUILDER !== 'false'), // Default to true if not set
+  }),
+);
 
 export default config;

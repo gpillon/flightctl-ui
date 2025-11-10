@@ -11,6 +11,8 @@ var (
 	FctlApiInsecure      = getEnvVar("FLIGHTCTL_SERVER_INSECURE_SKIP_VERIFY", "false")
 	FctlCliArtifactsUrl  = getEnvUrlVar("FLIGHTCTL_CLI_ARTIFACTS_SERVER", "http://localhost:8090")
 	AlertManagerApiUrl   = getEnvUrlVar("FLIGHTCTL_ALERTMANAGER_PROXY", "https://localhost:8443")
+	BuilderApiUrl        = getEnvUrlVar("FLIGHTCTL_BUILDER_SERVER", "")
+	BuilderEnabled       = getEnvVar("ENABLE_BUILDER", "true")
 	TlsKeyPath           = getEnvVar("TLS_KEY", "")
 	TlsCertPath          = getEnvVar("TLS_CERT", "")
 	AuthClientId         = getEnvVar("AUTH_CLIENT_ID", "flightctl")
@@ -38,4 +40,8 @@ func getEnvVar(key string, defaultValue string) string {
 
 func IsOrganizationsEnabled() bool {
 	return strings.ToUpper(OrganizationsEnabled) == "TRUE"
+}
+
+func IsBuilderEnabled() bool {
+	return strings.ToUpper(BuilderEnabled) != "FALSE"
 }

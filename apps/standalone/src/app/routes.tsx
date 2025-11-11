@@ -68,6 +68,24 @@ const PendingEnrollmentRequestsBadge = React.lazy(
 const CommandLineToolsPage = React.lazy(
   () => import('@flightctl/ui-components/src/components/Masthead/CommandLineToolsPage'),
 );
+const ImageBuildsPage = React.lazy(
+  () => import('@flightctl/ui-components/src/components/ImageBuild/ImageBuildsPage/ImageBuildsPage'),
+);
+const CreateImageBuildWizard = React.lazy(
+  () => import('@flightctl/ui-components/src/components/ImageBuild/CreateImageBuild/CreateImageBuildWizard'),
+);
+const EditImageBuildWizard = React.lazy(
+  () => import('@flightctl/ui-components/src/components/ImageBuild/CreateImageBuild/EditImageBuildWizard'),
+);
+const CreateImageBuildYaml = React.lazy(
+  () => import('@flightctl/ui-components/src/components/ImageBuild/CreateImageBuild/CreateImageBuildYaml'),
+);
+const CreateImageBuildContainerfile = React.lazy(
+  () => import('@flightctl/ui-components/src/components/ImageBuild/CreateImageBuild/CreateImageBuildContainerfile'),
+);
+const ImageBuildDetails = React.lazy(
+  () => import('@flightctl/ui-components/src/components/ImageBuild/ImageBuildDetails/ImageBuildDetailsPage'),
+);
 
 export type ExtendedRouteObject = RouteObject & {
   title?: string;
@@ -116,7 +134,7 @@ const RedirectToEnrollmentDetails = () => {
   return <Navigate to={`/devicemanagement/enrollmentrequests/${enrollmentRequestId}`} replace />;
 };
 
-const getAppRoutes = (t: TFunction): ExtendedRouteObject[] => [
+const getAppRoutes = (t: TFunction, builderEnabled: boolean = true): ExtendedRouteObject[] => [
   {
     path: '/',
     element: <Navigate to="/overview" replace />,
@@ -304,6 +322,67 @@ const getAppRoutes = (t: TFunction): ExtendedRouteObject[] => [
       </TitledRoute>
     ),
   },
+  {
+    path: '/devicemanagement/imagebuilds',
+    showInNav: builderEnabled,
+    title: t('Image Builder'),
+    children: [
+      {
+        index: true,
+        title: t('Image Builder'),
+        element: (
+          <TitledRoute title={t('Image Builder')}>
+            <ImageBuildsPage />
+          </TitledRoute>
+        ),
+      },
+      {
+        path: 'create',
+        title: t('Create Image Build'),
+        element: (
+          <TitledRoute title={t('Create Image Build')}>
+            <CreateImageBuildWizard />
+          </TitledRoute>
+        ),
+      },
+      {
+        path: 'create-yaml',
+        title: t('Create Image Build from YAML'),
+        element: (
+          <TitledRoute title={t('Create Image Build from YAML')}>
+            <CreateImageBuildYaml />
+          </TitledRoute>
+        ),
+      },
+      {
+        path: 'create-containerfile',
+        title: t('Create Image Build from Containerfile'),
+        element: (
+          <TitledRoute title={t('Create Image Build from Containerfile')}>
+            <CreateImageBuildContainerfile />
+          </TitledRoute>
+        ),
+      },
+      {
+        path: ':buildId/edit',
+        title: t('Edit Image Build'),
+        element: (
+          <TitledRoute title={t('Edit Image Build')}>
+            <EditImageBuildWizard />
+          </TitledRoute>
+        ),
+      },
+      {
+        path: ':buildId/*',
+        title: t('Image Build Details'),
+        element: (
+          <TitledRoute title={t('Image Build Details')}>
+            <ImageBuildDetails />
+          </TitledRoute>
+        ),
+      },
+    ],
+  },
 ];
 
 const AppRouter = () => {
@@ -340,12 +419,13 @@ const AppRouter = () => {
     );
   }
 
+  // Default to true - will be checked dynamically in AppNavigation
   const router = createBrowserRouter([
     {
       path: '/',
       element: <AppLayout />,
       errorElement: <ErrorPage />,
-      children: getAppRoutes(t),
+      children: getAppRoutes(t, true),
     },
   ]);
 

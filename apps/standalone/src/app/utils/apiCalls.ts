@@ -46,6 +46,11 @@ const getFullApiUrl = (path: string) => {
   if (path.startsWith('alerts')) {
     return { api: 'alerts', url: `${uiProxyAPI}/alerts/api/v2/${path}` };
   }
+  // ImageBuild endpoints are now in the main FlightCtl API, not a separate builder service
+  // The proxy will handle routing from /api/builder/* to /api/v1/imagebuilds/*
+  if (path.startsWith('imagebuilds')) {
+    return { api: 'builder', url: `${uiProxyAPI}/builder/v1/${path}` };
+  }
   return { api: 'flightctl', url: `${flightCtlAPI}/api/v1/${path}` };
 };
 
@@ -115,6 +120,9 @@ const fetchWithRetry = async <R>(path: string, init?: RequestInit): Promise<R> =
   }
   if (api === 'alerts') {
     return handleAlertsJSONResponse(response);
+  }
+  if (api === 'builder') {
+    return handleApiJSONResponse(response);
   }
   return handleApiJSONResponse(response);
 };

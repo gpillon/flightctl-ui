@@ -18,4 +18,10 @@ export const appRoutes = {
   [ROUTE.ENROLLMENT_REQUESTS]: '/edge/enrollmentrequests',
   [ROUTE.ENROLLMENT_REQUEST_DETAILS]: '/edge/enrollmentrequests',
   [ROUTE.COMMAND_LINE_TOOLS]: '/', // TODO - TBD where to show the CLI downloads?
+  [ROUTE.IMAGE_BUILDS]: '/edge/imagebuilds',
+  [ROUTE.IMAGE_BUILD_CREATE]: '/edge/imagebuilds/create',
+  [ROUTE.IMAGE_BUILD_CREATE_YAML]: '/edge/imagebuilds/create-yaml',
+  [ROUTE.IMAGE_BUILD_CREATE_CONTAINERFILE]: '/edge/imagebuilds/create-containerfile',
+  [ROUTE.IMAGE_BUILD_DETAILS]: '/edge/imagebuilds',
+  [ROUTE.IMAGE_BUILD_EDIT]: '/edge/imagebuilds',
 };

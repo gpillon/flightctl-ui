@@ -16,8 +16,16 @@ export const useFetchPeriodically = <R>(
   const [forceUpdate, setForceUpdate] = React.useState(0);
   const ref = React.useRef(0);
   const prevResolvedQueryHash = React.useRef<string>();
+  const isMountedRef = React.useRef(true);
 
   const { get } = useFetch();
+
+  React.useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   React.useEffect(() => {
     let abortController: AbortController;
@@ -29,10 +37,18 @@ export const useFetchPeriodically = <R>(
           try {
             abortController = new AbortController();
             if (id > 0 && prevResolvedQueryHash.current !== query.endpoint) {
+              if (isMountedRef.current) {
               setIsUpdating(true);
+              }
             }
 
             const data = (await get<R>(requestQuery, abortController.signal)) as R;
+            
+            // Check if component is still mounted before updating state
+            if (!isMountedRef.current) {
+              return;
+            }
+            
             if (isLoading) {
               setIsLoading(false);
             }
@@ -50,14 +66,22 @@ export const useFetchPeriodically = <R>(
             if (abortController.signal.aborted) {
               return;
             }
+            
+            // Check if component is still mounted before updating state
+            if (!isMountedRef.current) {
+              return;
+            }
+            
             setError(err);
             setIsLoading(false);
             setIsUpdating(false);
           }
         } else {
+          if (isMountedRef.current) {
           setIsLoading(false);
           setError(undefined);
           setData(undefined);
+          }
         }
         prevResolvedQueryHash.current = query.endpoint;
         await new Promise((resolve) => setTimeout(resolve, query.timeout || TIMEOUT));

@@ -1,0 +1,34 @@
+.fctl-create-image-build {
+  /* Styles for the wizard if needed */
+}
+
+/* Remove scrollbar from wizard main - let content scroll naturally */
+.fctl-create-image-build .pf-v5-c-wizard__main {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+.fctl-create-image-build .pf-v5-c-wizard__main-body {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+.fctl-containerfile-preview {
+  height: 600px;
+  min-height: 600px;
+  width: 100%;
+}
+
+.fctl-containerfile-preview .monaco-editor {
+  height: 100% !important;
+  min-height: 600px !important;
+}
+
+.fctl-containerfile-preview .pf-v5-c-code-editor__main {
+  height: 100%;
+}
+
+.fctl-containerfile-preview .pf-v5-c-code-editor__code {
+  height: 100%;
+}
+

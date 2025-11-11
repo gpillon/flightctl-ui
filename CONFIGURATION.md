@@ -9,6 +9,7 @@ This document describes all environment variables and configuration options avai
 | `ENABLE_ORGANIZATIONS` | Enable/disable organizations support      | `false` | `true`, `false` |
 | `ENABLE_CLI_ARTIFACTS` | Enable/disable CLI download functionality | `true`  | `true`, `false` |
 | `ENABLE_ALERTMANAGER`  | Enable/disable alerts functionality       | `true`  | `true`, `false` |
+| `ENABLE_BUILDER`       | Enable/disable Image Builder functionality | `true`  | `true`, `false` |
 
 ## Backend configuration
 
@@ -19,6 +20,10 @@ This document describes all environment variables and configuration options avai
 | `FLIGHTCTL_SERVER_INSECURE_SKIP_VERIFY` | Skip backend server TLS verification | `false`                  | `true`, `false`                        |
 | `FLIGHTCTL_CLI_ARTIFACTS_SERVER`        | CLI artifacts server URL             | `http://localhost:8090`  | `https://cli.flightctl.example.com`    |
 | `FLIGHTCTL_ALERTMANAGER_PROXY`          | AlertManager proxy server URL        | `https://localhost:8443` | `https://alerts.flightctl.example.com` |
+| `FLIGHTCTL_BUILDER_SERVER`             | Image Builder API server URL         | _(empty, uses FLIGHTCTL_SERVER)_ | `https://builder.flightctl.example.com`|
+
+**Note**: If `FLIGHTCTL_BUILDER_SERVER` is not set, the UI will automatically use `FLIGHTCTL_SERVER` for ImageBuild API endpoints. The ImageBuild API is integrated into the main FlightCtl API at `/api/v1/imagebuilds`.
+
 | `INTERNAL_AUTH_URL`                     | Internal authentication URL          | _(empty)_                | `https://auth.internal.example.com`    |
 | `AUTH_INSECURE_SKIP_VERIFY`             | Skip auth server TLS verification    | `false`                  | `true`, `false`                        |
 | `AUTH_CLIENT_ID`                        | OAuth client ID for authentication   | `flightctl`              | Custom client ID                       |
